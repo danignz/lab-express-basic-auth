@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/User.model");
 const bcrypt = require("bcrypt");
 const saltRounds = 11;
+const isLoggedIn = require('../middlewares');
 
 router.get("/signup", (req, res, next) => {
   res.render("auth/signup");
@@ -75,6 +76,17 @@ router.post("/signup", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+router.post("/logout", (req, res, next) => {
+  // This method destroys the session on the database and the cookie
+  req.session.destroy((err) => {
+    if (err) {
+      next(err);
+    } else {
+      res.redirect("/auth/login");
+    }
+  });
 });
 
 module.exports = router;

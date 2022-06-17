@@ -1,1 +1,11 @@
-<h1>Welcome {{ username }}</h1>
+<h1>Welcome to CookieApp</h1><br />
+
+{{#if username}}
+  <h2>{{username}}, you have successfully been logged in</h2><br />
+  <h3>And you are able to loggin out!</h3>
+   <button><a href="/main">Main</a></button><br>
+   <button><a href="/private">Private</a></button><br>
+  <form action="/auth/logout" method="POST"><button type="submit">Log out</button></form>
+{{else}}
+  <p>You are not login in yet!</p>
+{{/if}}
