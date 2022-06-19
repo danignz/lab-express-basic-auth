@@ -4,10 +4,10 @@
   <form action="/auth/login" method="POST">
 
     <label>Username</label>
-    <input type="text" name="username" placeholder="Dani G" />
+    <input type="text" name="username" placeholder="Dani G" required minlength="6" maxlength="12"/>
 
     <label>Password</label>
-    <input type="password" name="password" placeholder="********" />
+    <input type="password" name="password" placeholder="********" required minlength="6" maxlength="12"/>
 
     {{#if error}}
       <p style="color: red;">{{error}}</p>

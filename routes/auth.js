@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/User.model");
 const bcrypt = require("bcrypt");
 const saltRounds = 11;
-const isLoggedIn = require('../middlewares');
+const isLoggedIn = require("../middlewares");
 
 router.get("/signup", (req, res, next) => {
   res.render("auth/signup");
@@ -67,12 +67,22 @@ router.post("/signup", async (req, res, next) => {
     return;
   }
   try {
-    // Generate salt
-    const salt = await bcrypt.genSalt(saltRounds);
-    // Use salt to hash password
-    const hashedPassword = await bcrypt.hash(password, salt);
-    await User.create({ username, hashedPassword });
-    res.redirect("/auth/login");
+    // Bonus: Check if user exists on our DB
+    const user = await User.findOne({ username: username });
+    // Bonus username can't be repeated
+    if (user) {
+      res.render("auth/signup", {
+        error: "Username is not avariable. Try with another one.",
+      });
+      return;
+    } else {
+      // Generate salt
+      const salt = await bcrypt.genSalt(saltRounds);
+      // Use salt to hash password
+      const hashedPassword = await bcrypt.hash(password, salt);
+      await User.create({ username, hashedPassword });
+      res.redirect("/auth/login");
+    }
   } catch (error) {
     next(error);
   }
@@ -84,7 +94,7 @@ router.post("/logout", (req, res, next) => {
     if (err) {
       next(err);
     } else {
-      res.redirect("/auth/login");
+      res.redirect("/");
     }
   });
 });
